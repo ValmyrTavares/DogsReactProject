@@ -15,8 +15,9 @@ function App() {
   <Routes>
    
       <Route path="/" element={<Home/>}/>
-      <Route path="/login" element={<Login/>}/>
-
+      <Route path="/login/*" element={<Login/>}/>
+      {/* IMPORTANTE LEMBRAR QUE QUANDO TEMOS UMA ROTA QUE TEM OUTRAS ROTAS DENTRO
+      PRECISAMOS COLOCAR O ASTERISTICO DEPOIS PARA QUE ELE FUNCIONE */}
   </Routes>    
   <Footer/>
     </BrowserRouter>
