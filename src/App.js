@@ -4,12 +4,16 @@ import Footer from './component/Footer';
 import Header from './component/Header';
 import Home from './component/Home';
 import Login from './component/Login/Login';
+    // import Api from './api/Api'
 
 import './style.scss'
 
 
 function App() {
   return (
+    // <div>
+    //   <Api/>
+    // </div>
     <BrowserRouter>
     <Header/>
   <Routes>

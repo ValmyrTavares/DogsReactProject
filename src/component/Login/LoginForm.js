@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { TOKEN_POST,  USER_GET } from '../../api'
 import useForm from '../../Hooks/useForm'
 import Button from '../forms/Button'
 import Input from '../forms/Input'
@@ -8,25 +9,38 @@ function LoginForm() {
 
    const username = useForm();
    const password = useForm();
+
+   React.useState(()=> {
+        const token = window.localStorage.getItem('token')
+        if(token){
+            getUser(token)
+
+        }
+   },[])
+
+
+   async function getUser(token){
+       const{url, options} = USER_GET(token)
+       const response = await fetch(url, options)
+       const json = await response.json();
+       console.log(json)
+   }
    
-    function handleSubmit(event){
+   async function handleSubmit(event){
         event.preventDefault()
 
         if(username.validate && password.validate){
-            fetch('https://dogsapi.origamid.dev/jason/jwt-auth/v1/token',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'Aplication/json',
-                },
-                body: JSON.stringify({username,password})
+
+            const {url, options} = TOKEN_POST({
+                username: username.value,
+                password:password.value
             })
-            .then((response)=> {
-                console.log(response)
-                return response.json()
-            })
-            .then(json => {
-                console.logO(json)
-            })
+            
+            const response =  await fetch(url, options)
+           const json = await response.json();           
+           window.localStorage.setItem('token',json.token);
+           getUser(json.token);
+          
         }
     }
 
@@ -36,7 +50,7 @@ function LoginForm() {
     return (
         <section className="container">
             <h1>Login</h1>
-            <form action="" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <Input type="text" name="username" label="Name" {...username}/>
                 <Input type="password" name="password" label="Senha" {...password}/>
                 <Button children="Entrar"/>
